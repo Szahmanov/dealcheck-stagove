@@ -110,7 +110,19 @@ Analyse these results and give a price verdict for this product in Bulgaria.`;
     else throw new Error('Неуспешен парсинг на отговора');
   }
 
-  if (!['buy','wait','skip'].includes(parsed.verdict)) parsed.verdict = 'wait';
+  // Ensure verdict exists — Groq sometimes omits it
+  const score = parseInt(parsed.deal_score) || 50;
+  if (!parsed.verdict || !['buy','wait','skip'].includes(parsed.verdict)) {
+    parsed.verdict = score >= 70 ? 'buy' : score >= 40 ? 'wait' : 'skip';
+  }
+  parsed.product_name   = parsed.product_name   || '';
+  parsed.lowest_price   = parsed.lowest_price   || '—';
+  parsed.price_range    = parsed.price_range    || '';
+  parsed.deal_score     = parsed.deal_score     || 50;
+  parsed.reason         = parsed.reason         || '';
+  parsed.market_context = parsed.market_context || '';
+  parsed.recommendation = parsed.recommendation || '';
+  parsed.sources        = parsed.sources        || [];
   return parsed;
 }
 
