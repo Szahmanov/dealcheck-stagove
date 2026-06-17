@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0A0A0A" />
+  <meta name="description" content="Провери дали цената е добра — преди да купиш." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="DealCheck" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
+  <title>DealCheck by StaGove</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0A0A0A;
+      --surface: #141414;
+      --surface2: #1C1C1C;
+      --border: #272727;
+      --text: #EFEFEF;
+      --muted: #666;
+      --accent: #C8F135;
+      --accent-dim: rgba(200,241,53,0.1);
+      --green: #C8F135;
+      --yellow: #FFD60A;
+      --red: #FF453A;
+      --radius: 16px;
+      --font: 'Space Grotesk', system-ui, sans-serif;
+      --mono: 'Space Mono', monospace;
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      min-height: 100dvh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    /* ── Header ── */
+    header {
+      padding: 22px 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: baseline;
+      gap: 2px;
+    }
+
+    .logo-deal {
+      font-family: var(--mono);
+      font-size: 19px;
+      color: var(--accent);
+      letter-spacing: -1px;
+    }
+
+    .logo-check {
+      font-family: var(--mono);
+      font-size: 19px;
+      color: var(--text);
+      letter-spacing: -1px;
+    }
+
+    .logo-by {
+      font-size: 10px;
+      color: var(--muted);
+      margin-left: 8px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .live-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid rgba(200,241,53,0.2);
+      padding: 5px 11px;
+      border-radius: 99px;
+      letter-spacing: 0.04em;
+    }
+
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 36px 20px 28px;
+      max-width: 540px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .hero-tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero-tag::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .hero h1 {
+      font-size: clamp(26px, 6vw, 34px);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    /* ── Search ── */
+    .search-section {
+      padding: 0 20px 24px;
+      max-width: 540px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .input-wrap {
+      position: relative;
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+      font-size: 16px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 16px;
+      font-weight: 500;
+      padding: 15px 16px 15px 44px;
+      outline: none;
+      transition: border-color 0.15s, background 0.15s;
+      -webkit-appearance: none;
+      width: 100%;
+    }
+
+    input[type="text"]::placeholder { color: var(--muted); font-weight: 400; }
+    input[type="text"]:focus {
+      border-color: var(--accent);
+      background: var(--surface2);
+    }
+
+    .check-btn {
+      background: var(--accent);
+      color: #0A0A0A;
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 15px 22px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.15s, transform 0.1s;
+      -webkit-tap-highlight-color: transparent;
+      letter-spacing: 0.01em;
+    }
+
+    .check-btn:active { opacity: 0.8; transform: scale(0.96); }
+    .check-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+
+    /* ── Chips ── */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .chip {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 6px 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .chip:active, .chip:hover { color: var(--accent); border-color: rgba(200,241,53,0.4); background: var(--accent-dim); }
+
+    /* ── Loading ── */
+    .loading {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding: 40px 20px;
+      max-width: 540px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .loading.visible { display: flex; }
+
+    .loader-ring {
+      width: 44px;
+      height: 44px;
+      position: relative;
+    }
+
+    .loader-ring svg {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .loading-step {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 400;
+      text-align: center;
+    }
+
+    /* ── Error ── */
+    .error-box {
+      display: none;
+      margin: 0 20px;
+      max-width: 540px;
+      width: calc(100% - 40px);
+      margin: 0 auto;
+      background: rgba(255,69,58,0.08);
+      border: 1px solid rgba(255,69,58,0.2);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      font-size: 13px;
+      color: #FF6B6B;
+      line-height: 1.5;
+    }
+
+    .error-box.visible { display: block; }
+
+    /* ── Result ── */
+    .result {
+      display: none;
+      flex-direction: column;
+      max-width: 540px;
+      width: calc(100% - 40px);
+      margin: 0 auto 32px;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .result.visible { display: flex; }
+
+    /* Verdict top */
+    .verdict-header {
+      padding: 28px 24px 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .verdict-header.buy  { background: linear-gradient(135deg, rgba(200,241,53,0.12) 0%, rgba(200,241,53,0.03) 100%); border-bottom: 1px solid rgba(200,241,53,0.15); }
+    .verdict-header.wait { background: linear-gradient(135deg, rgba(255,214,10,0.12) 0%, rgba(255,214,10,0.03) 100%); border-bottom: 1px solid rgba(255,214,10,0.15); }
+    .verdict-header.skip { background: linear-gradient(135deg, rgba(255,69,58,0.12) 0%, rgba(255,69,58,0.03) 100%); border-bottom: 1px solid rgba(255,69,58,0.15); }
+
+    .verdict-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .verdict-word {
+      font-family: var(--mono);
+      font-size: clamp(44px, 12vw, 58px);
+      font-weight: 700;
+      letter-spacing: -2px;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .verdict-word.buy  { color: var(--green); }
+    .verdict-word.wait { color: var(--yellow); }
+    .verdict-word.skip { color: var(--red); }
+
+    .verdict-product {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    /* Score bar */
+    .score-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .score-track {
+      flex: 1;
+      height: 4px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .score-fill {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 0.8s cubic-bezier(0.16,1,0.3,1);
+      width: 0%;
+    }
+
+    .score-label {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      min-width: 44px;
+      text-align: right;
+    }
+
+    /* Price block */
+    .price-block {
+      background: var(--surface);
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .price-main {
+      font-family: var(--mono);
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -1px;
+    }
+
+    .price-range {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    /* Analysis */
+    .analysis {
+      background: var(--surface);
+      padding: 0;
+    }
+
+    .analysis-row {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .analysis-row:last-child { border-bottom: none; }
+
+    .analysis-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .analysis-text {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    /* Sources */
+    .sources-block {
+      background: var(--surface2);
+      padding: 14px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    .sources-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .sources-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .source-link {
+      font-size: 12px;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 5px 10px;
+      text-decoration: none;
+      transition: color 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .source-link:hover { color: var(--accent); }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 16px 20px 24px;
+      font-size: 11px;
+      color: var(--muted);
+      opacity: 0.35;
+    }
+
+    .disclaimer {
+      font-size: 11px;
+      color: var(--muted);
+      opacity: 0.45;
+      text-align: center;
+      padding: 0 20px 20px;
+      line-height: 1.5;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .live-dot, .loader-ring svg { animation: none; }
+      .score-fill { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <span class="logo-deal">Deal</span><span class="logo-check">Check</span>
+    <span class="logo-by">by StaGove</span>
+  </div>
+  <div class="live-pill">
+    <div class="live-dot"></div>
+    AI Live
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-tag">Ценови агент · България</div>
+  <h1>Намираме <em>най-ниската цена</em> и казваме купи ли.</h1>
+  <p class="hero-sub">Пишеш продукт. Агентът търси pazaruvaj.com и пазара. Получаваш verdict.</p>
+</div>
+
+<div class="search-section">
+  <div class="input-wrap">
+    <span class="search-icon">⌕</span>
+    <input type="text" id="query" placeholder="напр. Samsung Galaxy S25 256GB" autocomplete="off" autocorrect="off" spellcheck="false" />
+    <button class="check-btn" id="checkBtn" onclick="runCheck()">Провери</button>
+  </div>
+  <div class="chips">
+    <div class="chip" onclick="fillExample(this)">iPhone 16 Pro 128GB</div>
+    <div class="chip" onclick="fillExample(this)">MacBook Air M3</div>
+    <div class="chip" onclick="fillExample(this)">Sony WH-1000XM5</div>
+    <div class="chip" onclick="fillExample(this)">PS5 Slim</div>
+    <div class="chip" onclick="fillExample(this)">Dyson V15</div>
+  </div>
+</div>
+
+<div class="loading" id="loading">
+  <div class="loader-ring">
+    <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+      <circle cx="22" cy="22" r="18" stroke="#272727" stroke-width="3"/>
+      <path d="M22 4 A18 18 0 0 1 40 22" stroke="#C8F135" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="loading-label" id="loadingLabel">Търся цени…</div>
+  <div class="loading-step" id="loadingStep">Сканирам pazaruvaj.com</div>
+</div>
+
+<div class="error-box" id="errorBox"></div>
+
+<div class="result" id="result">
+  <div class="verdict-header" id="verdictHeader">
+    <div class="verdict-eyebrow">Вердикт</div>
+    <div class="verdict-word" id="verdictWord"></div>
+    <div class="verdict-product" id="verdictProduct"></div>
+    <div class="score-section">
+      <div class="score-track">
+        <div class="score-fill" id="scoreFill"></div>
+      </div>
+      <div class="score-label" id="scoreLabel"></div>
+    </div>
+  </div>
+
+  <div class="price-block">
+    <div class="price-main" id="priceMain">—</div>
+    <div class="price-range" id="priceRange"></div>
+  </div>
+
+  <div class="analysis" id="analysis"></div>
+
+  <div class="sources-block" id="sourcesBlock" style="display:none">
+    <div class="sources-label">Източници</div>
+    <div class="sources-list" id="sourcesList"></div>
+  </div>
+</div>
+
+<p class="disclaimer">Цените са от публични онлайн източници. Не е финансов съвет.</p>
+<footer>DealCheck by StaGove · <span id="yr"></span></footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+document.getElementById('query').addEventListener('keydown', e => { if (e.key === 'Enter') runCheck(); });
+
+function fillExample(el) {
+  document.getElementById('query').value = el.textContent;
+  document.getElementById('query').focus();
+}
+
+const steps = [
+  ['Търся цени…', 'Сканирам pazaruvaj.com'],
+  ['Сравнявам оферти…', 'Проверявам български магазини'],
+  ['Анализирам пазара…', 'Сравнявам с пазарната цена'],
+  ['Генерирам вердикт…', 'Последна стъпка']
+];
+let stepTimer;
+
+function setLoading(on) {
+  document.getElementById('loading').classList.toggle('visible', on);
+  document.getElementById('result').classList.remove('visible');
+  document.getElementById('errorBox').classList.remove('visible');
+  document.getElementById('checkBtn').disabled = on;
+  if (on) {
+    let i = 0;
+    document.getElementById('loadingLabel').textContent = steps[0][0];
+    document.getElementById('loadingStep').textContent = steps[0][1];
+    stepTimer = setInterval(() => {
+      i = Math.min(i + 1, steps.length - 1);
+      document.getElementById('loadingLabel').textContent = steps[i][0];
+      document.getElementById('loadingStep').textContent = steps[i][1];
+    }, 2500);
+  } else {
+    clearInterval(stepTimer);
+  }
+}
+
+function showError(msg) {
+  const el = document.getElementById('errorBox');
+  el.textContent = '⚠ ' + msg;
+  el.classList.add('visible');
+}
+
+function renderResult(d) {
+  const map = { buy: 'КУПИ', wait: 'ИЗЧАКАЙ', skip: 'ПРОПУСНИ' };
+  const colors = { buy: '#C8F135', wait: '#FFD60A', skip: '#FF453A' };
+  const v = d.verdict || 'wait';
+
+  // Header
+  const hdr = document.getElementById('verdictHeader');
+  hdr.className = 'verdict-header ' + v;
+  const vw = document.getElementById('verdictWord');
+  vw.textContent = map[v] || 'ИЗЧАКАЙ';
+  vw.className = 'verdict-word ' + v;
+  document.getElementById('verdictProduct').textContent = d.product_name || '';
+
+  // Score
+  const score = parseInt(d.deal_score) || 50;
+  const color = colors[v];
+  document.getElementById('scoreLabel').textContent = score + '/100';
+  document.getElementById('scoreLabel').style.color = color;
+  const fill = document.getElementById('scoreFill');
+  fill.style.background = color;
+  setTimeout(() => { fill.style.width = score + '%'; }, 80);
+
+  // Price
+  document.getElementById('priceMain').textContent = d.lowest_price || '—';
+  document.getElementById('priceRange').textContent = d.price_range ? 'Диапазон: ' + d.price_range : '';
+
+  // Analysis rows
+  const an = document.getElementById('analysis');
+  an.innerHTML = '';
+  [
+    { label: 'Защо', text: d.reason },
+    { label: 'Пазарен контекст', text: d.market_context },
+    { label: 'Препоръка', text: d.recommendation }
+  ].forEach(s => {
+    if (!s.text) return;
+    const row = document.createElement('div');
+    row.className = 'analysis-row';
+    row.innerHTML = `<div class="analysis-label">${s.label}</div><div class="analysis-text">${s.text}</div>`;
+    an.appendChild(row);
+  });
+
+  // Sources
+  const sb = document.getElementById('sourcesBlock');
+  const sl = document.getElementById('sourcesList');
+  sl.innerHTML = '';
+  if (d.sources && d.sources.length) {
+    d.sources.forEach(src => {
+      const a = document.createElement('a');
+      a.className = 'source-link';
+      a.href = src.url || '#';
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.textContent = src.name || src.url;
+      sl.appendChild(a);
+    });
+    sb.style.display = 'flex';
+  } else {
+    sb.style.display = 'none';
+  }
+
+  document.getElementById('result').classList.add('visible');
+  document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+async function runCheck() {
+  const q = document.getElementById('query').value.trim();
+  if (!q) { document.getElementById('query').focus(); return; }
+  setLoading(true);
+  try {
+    const res = await fetch('/api/check', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: q })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Грешка ' + res.status);
+    renderResult(data);
+  } catch(e) {
+    showError(e.message || 'Нещо се обърка. Опитай отново.');
+  } finally {
+    setLoading(false);
+  }
+}
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+</script>
+
+</body>
+</html>
